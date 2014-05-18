@@ -15,7 +15,8 @@ THREE.ShaderLib = {
 
 			THREE.UniformsLib[ "common" ],
 			THREE.UniformsLib[ "fog" ],
-			THREE.UniformsLib[ "shadowmap" ]
+			THREE.UniformsLib[ "shadowmap" ],
+			THREE.UniformsLib[ "cuttingPlane" ]
 
 		] ),
 
@@ -247,6 +248,7 @@ THREE.ShaderLib = {
 
 			"varying vec3 vViewPosition;",
 			"varying vec3 vNormal;",
+			"varying vec3 vPostion;",
 
 			THREE.ShaderChunk[ "map_pars_vertex" ],
 			THREE.ShaderChunk[ "lightmap_pars_vertex" ],
@@ -283,6 +285,8 @@ THREE.ShaderLib = {
 				THREE.ShaderChunk[ "lights_phong_vertex" ],
 				THREE.ShaderChunk[ "shadowmap_vertex" ],
 
+			"   vPostion = worldPosition.xyz;",
+
 			"}"
 
 		].join("\n"),
@@ -297,6 +301,12 @@ THREE.ShaderLib = {
 			"uniform vec3 specular;",
 			"uniform float shininess;",
 
+			"varying vec3 vPostion;",
+			"uniform bool clipEnabled;",
+			"uniform bool clipInside;",
+			"uniform vec3 clipNormal;",
+			"uniform float clipDistance;",
+
 			THREE.ShaderChunk[ "color_pars_fragment" ],
 			THREE.ShaderChunk[ "map_pars_fragment" ],
 			THREE.ShaderChunk[ "lightmap_pars_fragment" ],
@@ -310,6 +320,15 @@ THREE.ShaderLib = {
 			THREE.ShaderChunk[ "logdepthbuf_pars_fragment" ],
 
 			"void main() {",
+
+			"	if(clipEnabled) {",
+			"		float dist = dot(vPostion, clipNormal) - clipDistance;",
+			"		if(clipInside) {",
+			"			if(dist < 0.0) { discard; }",
+			"		} else {",
+			"			if(dist > 0.0) { discard; }",
+			"		}",
+			"	}",
 
 			"	gl_FragColor = vec4( vec3( 1.0 ), opacity );",
 

@@ -97,6 +97,13 @@ THREE.UniformsLib = {
 
 		"shadowMatrix" : { type: "m4v", value: [] }
 
-	}
+	},
 
+	cuttingPlane: {
+		"clipEnabled": { type: "i", value: 0 },
+		"clipInside": { type: "i", value: 1 },
+		"clipNormal": { type: "v3", value: new THREE.Vector3(1, 0, 0) },
+		"clipDistance": { type: "f", value: 0.0 }
+
+	}
 };

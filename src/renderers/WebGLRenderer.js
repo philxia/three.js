@@ -4633,6 +4633,11 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 		}
 
+		if ( !!material.setCuttingPlaneParameters )
+		{
+			material.setCuttingPlaneParameters(uniforms);
+		}
+
 	};
 
 	function refreshUniformsLambert ( uniforms, material ) {
